@@ -55,6 +55,34 @@ app.post("/users", (req: Request, res: Response) => {
   });
 });
 
+app.post("/users/withdraw", (req: Request, res: Response) => {
+  const { id } = req.body;
+
+  //retrieve users from db
+  pool.query("SELECT * FROM users WHERE id = ?", [id], (error, results) => {
+    if (error) {
+      console.error("Error retrieving user: ", error);
+      res.status(500).send("Error retrieving user");
+    } else if (results.length === 0) {
+      res.status(404).send("User not found");
+    } else {
+      const user = results[0];
+      const profit = user.profit || 0;
+
+      // update user's profit in db to 0
+      pool.query("UPDATE users SET profit = 0 WHERE id = ?", [id], (error) => {
+        if (error) {
+          console.error("Error updating user profit: ", error);
+          res.status(500).send("Error updating user profit");
+        } else {
+          console.log("Profit withdrawn for user: ", id);
+          res.sendStatus(200);
+        }
+      });
+    }
+  });
+});
+
 // calculate profit
 const calculateProfits = () => {
   // retrieve users from db
