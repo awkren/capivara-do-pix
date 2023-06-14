@@ -66,7 +66,19 @@ const calculateProfits = () => {
       results.forEach((user: any) => {
         const investment = user.investment;
         const valueProfit = user.profit;
-        const profit = valueProfit + investment * 0.3333;
+        const maxProfit = investment * 0.3333 * 30;
+
+        if (valueProfit >= maxProfit) {
+          console.log(
+            "User has reached maximmum allowed value for user profit"
+          );
+          return;
+        }
+
+        const newProfit = valueProfit + investment * 0.3333;
+
+        // limit profit to not exceed
+        const profit = Math.min(newProfit, maxProfit);
 
         // update user's profit in the database
         pool.query(
