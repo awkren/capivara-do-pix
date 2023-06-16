@@ -1,6 +1,6 @@
-<div style="text-align: center;">
-  <img src="./capi.jpg" alt="Image" style="width: 250px; height: 250px;">
-</div>
+<p align:'center'>
+  <img src="./capi.jpg" alt="Image" width='40%'>
+</p>
 
 ## Sistema de <s>pirâmide</s> investimento onde o seu dinheiro <s>diminui</s> rende 33.33% ao mês.
 
