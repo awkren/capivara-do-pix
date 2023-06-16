@@ -38,10 +38,10 @@ app.get("/users", (req: Request, res: Response) => {
 });
 
 app.post("/users", (req: Request, res: Response) => {
-  const { name, investment } = req.body;
+  const { id, name, investment } = req.body;
 
   // create new user object
-  const user = { name, investment };
+  const user = { id, name, investment };
 
   // insert user into database
   pool.query("INSERT INTO users SET ?", user, (error, results) => {
