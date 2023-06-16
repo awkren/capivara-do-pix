@@ -1,4 +1,4 @@
-<p align:'center'>
+<p align='center'>
   <img src="./capi.jpg" alt="Image" width='40%'>
 </p>
 
