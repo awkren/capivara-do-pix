@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255),
+  investment DECIMAL(10, 2),
+  profit DECIMAL(10, 2) DEFAULT 0
+);
