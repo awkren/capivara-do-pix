@@ -83,6 +83,21 @@ app.post("/users/withdraw", (req: Request, res: Response) => {
   });
 });
 
+app.delete("/users/:id", (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  // delete user from db
+  pool.query("DELETE FROM users WHERE id = ?", [id], (error) => {
+    if(error){
+      console.error("Error deleting user", error);
+      res.status(500).send("Error deleting user");
+    }else{
+      console.log("User deleted successfully");
+      res.sendStatus(200);
+    }
+  });
+});
+
 // calculate profit
 const calculateProfits = () => {
   // retrieve users from db
