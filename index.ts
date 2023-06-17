@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import mysql from "mysql";
 import schedule from "node-schedule";
+import _ from "lodash";
 
 dotenv.config();
 
@@ -18,6 +19,8 @@ const dbConfig = {
 
 // create mysql connection pool
 const pool = mysql.createPool(dbConfig);
+
+let totalUsers = 0;
 
 app.use(express.json());
 
@@ -50,6 +53,7 @@ app.post("/users", (req: Request, res: Response) => {
       res.status(500).send("Error saving user");
     } else {
       console.log("User saved successfully");
+      totalUsers++
       res.sendStatus(200);
     }
   });
@@ -57,6 +61,14 @@ app.post("/users", (req: Request, res: Response) => {
 
 app.post("/users/withdraw", (req: Request, res: Response) => {
   const { id } = req.body;
+
+  const randomChance = totalUsers > 5 ? (totalUsers-5) * 0.05 : 0;
+
+  // check total users to apply random change to no be able to withdraw
+  if(totalUsers > 5 && _.random(0, 1) < randomChance){
+    res.status(403).send("Withdraw not allowed");
+    return;
+  }
 
   //retrieve users from db
   pool.query("SELECT * FROM users WHERE id = ?", [id], (error, results) => {
