@@ -1,8 +1,21 @@
 import { Request, Response } from "express";
 import { pool } from "../db";
-import { random } from "lodash";
+import _ from "lodash";
 
 let totalUsers = 0;
+
+const updateTotalUsers = () => {
+  pool.query("SELECT COUNT(*) AS total FROM users", (error, results) => {
+    if(error){
+      console.error("Error retrieving total users: ", error)
+    }else{
+      totalUsers = results[0].total || 0;
+      console.log("Total users: ", totalUsers)
+    }
+  })
+}
+
+updateTotalUsers();
 
 const getUsers = (req: Request, res: Response) => {
   // retrieve users from db
@@ -15,6 +28,8 @@ const getUsers = (req: Request, res: Response) => {
     }
   });
 };
+
+console.log(totalUsers)
 
 const createUser = (req: Request, res: Response) => {
   const { id, name, investment } = req.body;
@@ -41,7 +56,7 @@ const withdrawUserProfit = (req: Request, res: Response) => {
   const randomChance = totalUsers > 5 ? (totalUsers - 5) * 0.05 : 0;
 
   // check total users to apply random change to not be able to withdraw
-  if (totalUsers > 5 && random(0, 1) < randomChance) {
+  if (totalUsers > 5 && _.random(0, 1) < randomChance) {
     res.status(403).send("Withdraw not allowed");
     return;
   }
